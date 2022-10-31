@@ -1,4 +1,5 @@
 = How to install Magma on RHEL 9
+:source-highlighter: rouge
 
 == VM Requirements
 
@@ -8,35 +9,184 @@
 
 == Prepare VM
 
-=== Install Docker
+=== Install Docker and Docker Compose
 
 As stated https://docs.docker.com/engine/install/rhel/[here], Docker for RHEL is only available for s390x (IBM Z) architecture. To install Docker in x86_64, follow https://docs.docker.com/engine/install/centos/[Install Docker in CentOS].
 
 . Uninstall old versions
 +
-[source,bash]
+[source,console]
 ----
-$ sudo yum remove docker docker-client docker-client-latest docker-common  docker-latest docker-latest-logrotate docker-logrotate docker-engine podman runc
+$ sudo dnf remove docker docker-client docker-client-latest docker-common  docker-latest docker-latest-logrotate docker-logrotate docker-engine podman runc
 ----
 
 . Add repository
 +
-[source,bash]
+[source,console]
 ----
-$ sudo yum install -y yum-utils
-$ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+$ sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 ----
 
-. Install Docker
+. Install packages
 +
-[source,bash]
+[source,console]
 ----
-$ sudo yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+$ sudo dnf install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 ----
 
 . Start Docker
 +
-[source,bash]
+[source,console]
 ----
 $ sudo systemctl start docker
+----
+
+=== Install Virtual Box
+
+. Enable repositories
++
+[source,console]
+----
+$ sudo dnf config-manager --add-repo=https://download.virtualbox.org/virtualbox/rpm/el/virtualbox.repo
+----
+
+. Import VirtualBox public key
++
+[source,console]
+----
+$ sudo rpm --import https://www.virtualbox.org/download/oracle_vbox.asc
+----
+
+. Enable EPEL repository
++
+[source,console]
+----
+$ sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm -y
+----
+
+. Install VirtualBox dependencies
++
+[source,console]
+----
+$ sudo dnf install binutils kernel-devel kernel-headers libgomp make patch gcc glibc-headers glibc-devel dkms -y
+----
+
+. Install VirtualBox 6.1
++
+[source,console]
+----
+$ sudo dnf install VirtualBox-6.1 -y
+----
+
+. Add your local user to vboxuser group
++
+[source,console]
+----
+$ sudo usermod -aG vboxusers $USER
+$ newgrp vboxusers 
+----
+
+. Install VirtualBox extension pack
++
+[source,console]
+----
+$ wget https://download.virtualbox.org/virtualbox/6.1.36/Oracle_VM_VirtualBox_Extension_Pack-6.1.36a-152435.vbox-extpack
+$ sudo VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-6.1.36a-152435.vbox-extpack 
+----
+
+=== Install Vagrant
+
+The official Vagrant installation guide is available https://developer.hashicorp.com/vagrant/downloads[here]
+
+. Enable repository
++
+[source,console]
+----
+$  sudo dnf config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+----
+
+. Install Vagrant
++
+[source,console]
+----
+$ sudo dnf -y install vagrant
+----
+
+=== Install Golang version 18
+
+. Download source code
++
+[source,console]
+----
+$ wget https://artifactory.magmacore.org/artifactory/generic/go1.18.3.linux-amd64.tar.gz
+
+----
+
+. Remove previous Go installation
++
+[source,console]
+----
+$ sudo rm -rf /usr/local/go  
+----
+
+. Install Go
++
+[source,console]
+----
+$ sudo tar -C /usr/local -xzf go1.18.3.linux-amd64.tar.gz
+----
+
+. Add `/usr/local/go/bin` to the PATH environment variable
++
+[source,console]
+----
+$ export PATH=$PATH:/usr/local/go/bin
+----
+
+. Confirm that Go is installed
++
+[source,console]
+----
+$ go version
+----
+
+=== Install pyenv
+
+. Install dependencies
++
+[source,console]
+----
+$ sudo dnf install -y make gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel git
+----
+
+. Clone `pyenv` repository
++
+[source,console]
+----
+$ git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+----
+
+. Configure `pyenv`
++
+[source,console]
+----
+$ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile
+$ echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
+$ echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n eval "$(pyenv init -)"\nfi' >> ~/.bash_profile
+source ~/.bash_profile
+----
+
+. Create python virtual environment version 3.8.10
++
+[source,console]
+----
+$ pyenv install 3.8.10
+$ pyenv global 3.8.10
+----
+
+. Check pyenv version
++
+[source,console]
+----
+$ pyenv versions
 ----
