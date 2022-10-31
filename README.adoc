@@ -1,0 +1,42 @@
+= How to install Magma on RHEL 9
+
+== VM Requirements
+
+* 12 GB RAM
+* 40 GB Disk
+* UEFI
+
+== Prepare VM
+
+=== Install Docker
+
+As stated https://docs.docker.com/engine/install/rhel/[here], Docker for RHEL is only available for s390x (IBM Z) architecture. To install Docker in x86_64, follow https://docs.docker.com/engine/install/centos/[Install Docker in CentOS].
+
+1. Uninstall old versions
+
+[source,bash]
+----
+$ sudo yum remove docker docker-client docker-client-latest docker-common  docker-latest docker-latest-logrotate docker-logrotate docker-engine podman runc
+----
+
+2. Add repository
+
+[source,bash]
+----
+$ sudo yum install -y yum-utils
+$ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+----
+
+3. Install Docker
+
+[source,bash]
+----
+$ sudo yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+----
+
+4. Start Docker
+
+[source,bash]
+----
+$ sudo systemctl start docker
+----
