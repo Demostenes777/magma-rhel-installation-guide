@@ -1,15 +1,7 @@
 = How to install Magma on RHEL 9
 :source-highlighter: rouge
 
-== VM Requirements
-
-* 12 GB RAM
-* 40 GB Disk
-* UEFI
-
-== Prepare VM
-
-=== Install Docker and Docker Compose
+== Install Docker and Docker Compose
 
 As stated https://docs.docker.com/engine/install/rhel/[here], Docker for RHEL is only available for s390x (IBM Z) architecture. To install Docker in x86_64, follow https://docs.docker.com/engine/install/centos/[Install Docker in CentOS].
 
@@ -41,7 +33,7 @@ $ sudo dnf install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 $ sudo systemctl start docker
 ----
 
-=== Install Virtual Box
+== Install Virtual Box
 
 . Enable repositories
 +
@@ -94,7 +86,7 @@ $ wget https://download.virtualbox.org/virtualbox/6.1.36/Oracle_VM_VirtualBox_Ex
 $ sudo VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-6.1.36a-152435.vbox-extpack 
 ----
 
-=== Install Vagrant
+== Install Vagrant
 
 The official Vagrant installation guide is available https://developer.hashicorp.com/vagrant/downloads[here]
 
@@ -112,7 +104,7 @@ $  sudo dnf config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/ha
 $ sudo dnf -y install vagrant
 ----
 
-=== Install Golang version 18
+== Install Golang version 18
 
 . Download source code
 +
@@ -150,7 +142,7 @@ $ export PATH=$PATH:/usr/local/go/bin
 $ go version
 ----
 
-=== Install pyenv
+== Install pyenv
 
 . Install dependencies
 +
