@@ -1,7 +1,9 @@
 = How to install Magma on RHEL 9
 :source-highlighter: rouge
 
-== Install Docker and Docker Compose
+== Install Developer Tools
+
+=== Install Docker and Docker Compose
 
 As stated https://docs.docker.com/engine/install/rhel/[here], Docker for RHEL is only available for s390x (IBM Z) architecture. To install Docker in x86_64, follow https://docs.docker.com/engine/install/centos/[Install Docker in CentOS].
 
@@ -33,7 +35,7 @@ $ sudo dnf install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 $ sudo systemctl start docker
 ----
 
-== Install Virtual Box
+=== Install Virtual Box
 
 . Enable repositories
 +
@@ -86,7 +88,7 @@ $ wget https://download.virtualbox.org/virtualbox/6.1.36/Oracle_VM_VirtualBox_Ex
 $ sudo VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-6.1.36a-152435.vbox-extpack 
 ----
 
-== Install Vagrant
+=== Install Vagrant
 
 The official Vagrant installation guide is available https://developer.hashicorp.com/vagrant/downloads[here]
 
@@ -104,9 +106,9 @@ $  sudo dnf config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/ha
 $ sudo dnf -y install vagrant
 ----
 
-== Install Golang version 18
+=== Install Golang 
 
-. Download source code
+. Download source code to install Golang version 18.
 +
 [source,console]
 ----
@@ -142,7 +144,7 @@ $ export PATH=$PATH:/usr/local/go/bin
 $ go version
 ----
 
-== Install pyenv
+=== Install pyenv
 
 . Install dependencies
 +
@@ -181,4 +183,58 @@ $ pyenv global 3.8.10
 [source,console]
 ----
 $ pyenv versions
+----
+
+=== Install pip3
+
+. Install `pyp`
++
+[source,console]
+----
+$ sudo dnf install python3-pip
+----
+
+. Install dependencies
++
+[source,console]
+----
+$ pip3 install ansible fabric3 jsonpickle requests PyYAML
+----
+
+. Upgrade pip
++
+[source,console]
+----
+$ /home/redhat/.pyenv/versions/3.8.10/bin/python3.8 -m pip install --upgrade pip
+----
+
+=== Install Vagrant plugins
+
+. Install vagran plugins
++
+[source,console]
+----
+vagrant plugin install vagrant-vbguest vagrant-disksize vagrant-reload
+----
+
+. Edit `.bashrc` and add the following line
++
+----
+VAGRANT_DEFAULT_PROVIDER="virtualbox"
+----
+
+. Source `.bashrc`
++
+[source,console]
+----
+$ source ~/.bashrc
+----
+
+=== Download Magma
+
+. Download Magma source code from the repository
++
+[source,console]
+----
+$ git clone https://github.com/magma/magma.git
 ----
